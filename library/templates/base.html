@@ -1,0 +1,346 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}E-Library{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        body {
+            /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+            background-attachment: fixed;
+            font-family: "Segoe UI", Arial, sans-serif;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .content-wrapper {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.95);
+            margin: 0 auto;
+            width: 100%;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+        }
+        /* Top Navbar */
+        .top-navbar {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 8px 15px;
+            overflow-x: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        .top-navbar a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            transition: color 0.3s ease;
+        }
+        .top-navbar a:hover {
+            color: #64b5f6;
+        }
+        /* Main Navbar */
+        .main-navbar {
+            background: linear-gradient(to right, #ffffff 0%, #f8f9ff 100%);
+            border-bottom: 3px solid #667eea;
+            padding: 12px 15px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+        }
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.6rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            white-space: nowrap;
+        }
+        .main-navbar .nav-link {
+            color: #333;
+            margin: 0 10px;
+            font-weight: 500;
+            position: relative;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        /* Hover underline animation */
+        .main-navbar .nav-link::after {
+            content: "";
+            position: absolute;
+            width: 0%;
+            height: 3px;
+            bottom: -4px;
+            left: 0;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease-in-out;
+            border-radius: 2px;
+        }
+        .main-navbar .nav-link:hover {
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+        .main-navbar .nav-link:hover::after {
+            width: 100%;
+        }
+        /* Search Box */
+        .search-box {
+            max-width: 250px;
+            flex-shrink: 1;
+        }
+        .search-box input {
+            border: 2px solid #e0e7ff;
+            border-radius: 25px 0 0 25px;
+            transition: all 0.3s ease;
+        }
+        .search-box input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        .search-box button {
+            border-radius: 0 25px 25px 0;
+            border: 2px solid #e0e7ff;
+            border-left: none;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .search-box button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        /* Modern Footer */
+        footer {
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 50%, #1a1a2e 100%);
+            color: #fff;
+            padding: 50px 0 20px;
+            margin-top: 80px;
+            box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3);
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .footer-section {
+            margin-bottom: 30px;
+        }
+        .footer-section h5 {
+            font-weight: 600;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            color: #fff;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        .footer-section h5::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+        .footer-section ul li a {
+            color: #e0e7ff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        .footer-section ul li a:hover {
+            color: #fff;
+            transform: translateX(5px);
+        }
+        .social-icons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(102, 126, 234, 0.2);
+            border-radius: 50%;
+            margin-right: 10px;
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .social-icons a:hover {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 30px;
+            padding-top: 20px;
+            text-align: center;
+            color: #b8c5e0;
+        }
+        .newsletter-input {
+            display: flex;
+            margin-top: 15px;
+        }
+        .newsletter-input input {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px 0 0 25px;
+            outline: none;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        .newsletter-input button {
+            padding: 12px 28px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 0 25px 25px 0;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .newsletter-input button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Mobile Fixes */
+        @media (max-width: 767px) {
+            .search-box {
+                max-width: 100%;
+                margin-top: 8px;
+            }
+            .main-navbar .nav-link {
+                margin: 5px 0;
+            }
+            .navbar-collapse {
+                text-align: center;
+            }
+            footer {
+                padding: 30px 15px 15px;
+            }
+            .footer-section h5::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            .footer-section {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navbar -->
+    <div class="top-navbar d-flex justify-content-end">
+        <a href="#">
+            <i class="bi bi-geo-alt-fill" style="color: #64b5f6;"></i> Find a Library
+        </a>
+    </div>
+
+    <!-- Main Navbar -->
+    <nav class="navbar navbar-expand-lg main-navbar">
+        <div class="container-fluid">
+            <!-- Logo -->
+            <a class="navbar-brand" href="{% url 'landing' %}">E-Library</a>
+
+            <!-- Toggle Button for Mobile -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Center Links -->
+            <div class="collapse navbar-collapse justify-content-center" id="mainNav">
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'browse_collections' %}">Browse Collections</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Apps</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Blog</a></li>
+                </ul>
+
+                <!-- Right: Search box -->
+                <form class="d-flex ms-lg-3 search-box">
+                    <input class="form-control" type="search" placeholder="Search by title or author" aria-label="Search">
+                    <button class="btn" type="submit"><i class="bi bi-search"></i></button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="content-wrapper">
+        <div class="container mt-4">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <!-- Modern Footer -->
+    <footer>
+        <div class="container footer-content">
+            <div class="row">
+                <!-- About Section -->
+                <div class="col-lg-4 col-md-6 footer-section">
+                    <h5>About E-Library</h5>
+                    <p style="color: #e0e7ff; line-height: 1.8;">
+                        Your gateway to unlimited knowledge. Access thousands of books, journals, and resources from anywhere in the world.
+                    </p>
+                    <div class="social-icons mt-3">
+                        <a href="#"><i class="bi bi-facebook"></i></a>
+                        <a href="#"><i class="bi bi-twitter"></i></a>
+                        <a href="#"><i class="bi bi-instagram"></i></a>
+                        <a href="#"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-lg-2 col-md-6 footer-section">
+                    <h5>Quick Links</h5>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Collections</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <!-- Resources -->
+                <div class="col-lg-2 col-md-6 footer-section">
+                    <h5>Resources</h5>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Use</a></li>
+                        <li><a href="#">Accessibility</a></li>
+                        <li><a href="#">Site Map</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="col-lg-4 col-md-6 footer-section">
+                    <h5>Stay Updated</h5>
+                    <p style="color: #e0e7ff;">Subscribe to our newsletter for the latest books and updates.</p>
+                    <div class="newsletter-input">
+                        <input type="email" placeholder="Enter your email">
+                        <button type="submit"><i class="bi bi-send"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <p class="mb-0">&copy; 2025 E-Library. All rights reserved. | Empowering minds through digital reading</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

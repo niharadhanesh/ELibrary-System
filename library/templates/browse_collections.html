@@ -1,0 +1,335 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Browse Collections - E-Library{% endblock %}
+
+{% block content %}
+<style>
+    /* Page Header */
+    .collections-header {
+        text-align: center;
+        margin: 40px 0 10px 0;
+        color: #1a4d7c;
+        font-family: 'Georgia', 'Times New Roman', serif;
+        font-size: 2rem;
+        font-weight: 500;
+    }
+    .collections-subheader {
+        text-align: center;
+        color: #4c6b8a;
+        margin-bottom: 30px;
+        font-size: 1.1rem;
+        font-style: italic;
+    }
+
+    /* Category Buttons */
+    .category-buttons {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    .category-buttons .btn {
+        margin: 5px 5px;
+        border-radius: 25px;
+        border: 1px solid #1a4d7c;
+        color: #1a4d7c;
+        background-color: #fff;
+        font-weight: 500;
+        padding: 7px 18px;
+        font-size: 0.9rem;
+        transition: 0.3s;
+    }
+    .category-buttons .btn:hover {
+        background-color: #1a4d7c;
+        color: #fff;
+    }
+
+    /* Books Section */
+    .books-section {
+        background-color: #eaf6fc;
+        padding: 30px;
+        border-radius: 8px;
+        margin: 0 auto 60px auto;
+        max-width: 1200px;
+    }
+    .books-section h5 {
+        color: #1a4d7c;
+        font-weight: bold;
+        margin-bottom: 10px;
+        font-size: 1.3rem;
+    }
+    .books-section p {
+        color: #4c6b8a;
+        margin-bottom: 15px;
+    }
+    .books-section a {
+        color: #1a4d7c;
+        font-weight: 600;
+        text-decoration: none;
+    }
+    .books-section a:hover {
+        text-decoration: underline;
+    }
+
+    /* Book Grid */
+    .book-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 25px;
+    }
+
+    /* Book Card */
+    .book-card {
+        text-align: left;
+    }
+    .book-card img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        border-radius: 6px;
+        box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+        margin-bottom: 10px;
+        transition: transform 0.2s ease;
+    }
+    .book-card img:hover {
+        transform: scale(1.05);
+    }
+
+    /* Book Title */
+    .book-title {
+        font-weight: 600;
+        color: #1a4d7c;
+        font-size: 0.95rem;
+        text-decoration: none;
+    }
+    .book-title:hover {
+        text-decoration: underline;
+    }
+
+    /* Book Author */
+    .book-author {
+        font-size: 0.85rem;
+        color: #333;
+    }
+</style>
+
+<!-- Header -->
+<h2 class="collections-header">Explore our collection</h2>
+<p class="collections-subheader">There's something for everybody</p>
+
+<!-- Categories -->
+<div class="category-buttons">
+    <button class="btn">Biography</button>
+    <button class="btn">Business</button>
+    <button class="btn">Children</button>
+    <button class="btn">Fantasy</button>
+    <button class="btn">Fiction</button>
+    <button class="btn">History</button>
+    <button class="btn">Literature</button>
+    <button class="btn">Mystery</button>
+    <button class="btn">Nonfiction</button>
+    <button class="btn">Religion</button>
+    <button class="btn">Romance</button>
+    <button class="btn">Science Fiction</button>
+    <button class="btn">Suspense</button>
+    <button class="btn">Technology</button>
+    <button class="btn">Thriller</button>
+    <button class="btn">Travel</button>
+    <button class="btn">Young Adult</button>
+</div>
+
+<!-- Books Section -->
+<div class="books-section">
+    <h5>Biggest Books of October</h5>
+    <p>Get your TBR lists ready for some great new reads! <a href="#">See all 100 titles &gt;</a></p>
+
+    <div class="book-grid">
+        <div class="book-card">
+            <img src="{% static 'images/book13.jpeg' %}" alt="Mate">
+            <a href="#" class="book-title">Mate</a>
+            <p class="book-author">Ali Hazelwood (2025)</p>
+        </div>
+        <div class="book-card">
+            <img src="{% static 'images/book14.jpeg' %}" alt="The Widow">
+            <a href="#" class="book-title">The Widow</a>
+            <p class="book-author">John Grisham (2025)</p>
+        </div>
+        <div class="book-card">
+            <img src="{% static 'images/book15.jpeg' %}" alt="Partypooper">
+            <a href="#" class="book-title">Partypooper</a>
+            <p class="book-author">Jeff Kinney (2025)</p>
+        </div>
+        <div class="book-card">
+            <img src="{% static 'images/book16.jpeg' %}" alt="Jessi Ramsey, Pet-sitter">
+            <a href="#" class="book-title">Jessi Ramsey, Pet-sitter</a>
+            <p class="book-author">Ellen T. Crenshaw (2025)</p>
+        </div>
+        <div class="book-card">
+            <img src="{% static 'images/book17.jpeg' %}" alt="Gone Before Goodbye">
+            <a href="#" class="book-title">Gone Before Goodbye</a>
+            <p class="book-author">Harlan Coben · Reese Witherspoon (2025)</p>
+        </div>
+       
+    </div>
+</div>
+
+
+<!-- Featured Collections Section -->
+<div class="featured-collections">
+  <h2 class="collections-header">Featured Collections</h2>
+
+  <div class="collections-grid">
+
+    <!-- Collection 1 -->
+    <div class="collection-box">
+      <h4 class="collection-title">Biggest Books of October</h4>
+      <div class="book-row">
+        <img src="{% static 'images/book1.jpeg' %}" alt="Book 1">
+        <img src="{% static 'images/book2.jpeg' %}" alt="Book 2">
+        <img src="{% static 'images/book3.jpeg' %}" alt="Book 3">
+        <a href="#" class="see-all">
+          <img src="{% static 'images/book5.jpeg' %}" alt="See All">
+          <span class="see-all-text">See all 100 titles</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Collection 2 -->
+    <div class="collection-box">
+      <h4 class="collection-title">Alchemy of Secrets Read-Alikes</h4>
+      <div class="book-row">
+        <img src="{% static 'images/book4.jpeg' %}" alt="Book 4">
+        <img src="{% static 'images/book5.jpeg' %}" alt="Book 5">
+        <img src="{% static 'images/book6.jpeg' %}" alt="Book 6">
+        <a href="#" class="see-all">
+          <img src="{% static 'images/book12.jpeg' %}" alt="See All">
+          <span class="see-all-text">See all 150 titles</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Collection 3 -->
+    <div class="collection-box">
+      <h4 class="collection-title">Listen While You Roam the Tracks &amp; Trails</h4>
+      <div class="book-row">
+        <img src="{% static 'images/book7.jpg' %}" alt="Book 7">
+        <img src="{% static 'images/book8.jpeg' %}" alt="Book 8">
+        <img src="{% static 'images/book9.jpeg' %}" alt="Book 9">
+        <a href="#" class="see-all">
+          <img src="{% static 'images/book20.jpeg' %}" alt="See All">
+          <span class="see-all-text">See all 15 titles</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Collection 4 -->
+    <div class="collection-box">
+      <h4 class="collection-title">Biggest Fantasy Reads This September: ANZ</h4>
+      <div class="book-row">
+        <img src="{% static 'images/book10.jpeg' %}" alt="Book 10">
+        <img src="{% static 'images/book11.jpeg' %}" alt="Book 11">
+        <img src="{% static 'images/book12.jpeg' %}" alt="Book 12">
+        <a href="#" class="see-all">
+          <img src="{% static 'images/book15.jpeg' %}" alt="See All">
+          <span class="see-all-text">See all 19 titles</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  .featured-collections {
+    margin: 60px auto;
+    max-width: 1300px;
+  }
+  .featured-collections .collections-header {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 40px;
+    color: #004080;
+  }
+  .collections-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+  }
+  .collection-box {
+    background-color: #eaf6fc;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .collection-title {
+    color: #004080;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 18px;
+    text-align: center;
+  }
+  .book-row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 12px;
+  }
+  .book-row img,
+  .see-all img {
+    width: 120px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+  }
+  .book-row img:hover,
+  .see-all img:hover {
+    transform: scale(1.05);
+  }
+
+  /* See All Overlay */
+  .see-all {
+    position: relative;
+    display: inline-block;
+    width: 120px;
+    height: 180px;
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+  }
+  .see-all img {
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+  }
+  .see-all-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #004080;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-align: center;
+    background: rgba(255,255,255,0.8);
+    padding: 6px 10px;
+    border-radius: 4px;
+    line-height: 1.2;
+    width: 90%;
+  }
+
+  /* Responsive */
+  @media (max-width: 992px) {
+    .collections-grid {
+      grid-template-columns: 1fr;
+    }
+    .book-row {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
+</style>
+
+{% endblock %}
