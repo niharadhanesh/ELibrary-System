@@ -653,9 +653,23 @@
           
           <td>
             <div class="action-buttons">
-              <button class="btn-action btn-view" onclick="viewDetails({{ record.id }})" title="View Details">
-                <i class="bi bi-eye"></i>
-              </button>
+              <button class="btn-action btn-view"
+        data-bs-toggle="modal"
+        data-bs-target="#recordDetailsModal"
+        data-id="{{ record.id }}"
+        data-user="{{ record.user.get_full_name|default:record.user.username }}"
+        data-email="{{ record.user.email }}"
+        data-book="{{ record.book.title }}"
+        data-author="{{ record.book.author }}"
+        data-borrow="{{ record.borrow_date|date:'M d, Y' }}"
+        data-due="{{ record.due_date|date:'M d, Y' }}"
+        data-return="{{ record.return_date|date:'M d, Y'|default:'Not returned' }}"
+        data-status="{{ record.status }}"
+        data-fine="{{ record.fine_amount|default:'0.00' }}"
+        title="View Details">
+       <i class="bi bi-eye"></i>
+      </button>
+
               
               {% if record.status in 'borrowed,overdue' %}
                 <button class="btn-action btn-return" onclick="processReturn({{ record.id }})" title="Process Return">
@@ -721,6 +735,184 @@
   </div>
   {% endif %}
 </div>
+
+
+<!-- Record Details Modal -->
+<div class="modal fade" id="recordDetailsModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content" style="border: none; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+
+      <div class="modal-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; padding: 25px 30px;">
+        <h5 class="modal-title" style="color: white; font-size: 24px; font-weight: 600; display: flex; align-items: center; margin: 0;">
+          <i class="bi bi-info-circle me-2"></i>Borrow Record Details
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" style="background: rgba(255, 255, 255, 0.3); opacity: 1; border-radius: 50%; width: 35px; height: 35px; background-image: none; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" onmouseover="this.style.background='rgba(255, 255, 255, 0.5)'; this.style.transform='rotate(90deg)';" onmouseout="this.style.background='rgba(255, 255, 255, 0.3)'; this.style.transform='rotate(0deg)';">
+          <span style="color: white; font-size: 24px; font-weight: 300;">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body" style="padding: 30px; background: #ffffff;">
+        <div class="details-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          
+          <div style="background: #f7fafc; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea;">
+            <p style="margin: 0; font-size: 12px; color: #718096; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">
+              <i class="bi bi-person-circle" style="margin-right: 6px;"></i>User
+            </p>
+            <p style="margin: 0; font-size: 16px; color: #2d3748; font-weight: 600;" id="modalUser"></p>
+          </div>
+
+          <div style="background: #f7fafc; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea;">
+            <p style="margin: 0; font-size: 12px; color: #718096; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">
+              <i class="bi bi-envelope" style="margin-right: 6px;"></i>Email
+            </p>
+            <p style="margin: 0; font-size: 14px; color: #2d3748; font-weight: 500; word-break: break-all;" id="modalEmail"></p>
+          </div>
+
+          <div style="background: #f7fafc; padding: 20px; border-radius: 12px; border-left: 4px solid #764ba2;">
+            <p style="margin: 0; font-size: 12px; color: #718096; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">
+              <i class="bi bi-book" style="margin-right: 6px;"></i>Book
+            </p>
+            <p style="margin: 0; font-size: 16px; color: #2d3748; font-weight: 600;" id="modalBook"></p>
+          </div>
+
+          <div style="background: #f7fafc; padding: 20px; border-radius: 12px; border-left: 4px solid #764ba2;">
+            <p style="margin: 0; font-size: 12px; color: #718096; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">
+              <i class="bi bi-person" style="margin-right: 6px;"></i>Author
+            </p>
+            <p style="margin: 0; font-size: 14px; color: #2d3748; font-weight: 500;" id="modalAuthor"></p>
+          </div>
+
+          <div style="background: #e6fffa; padding: 20px; border-radius: 12px; border-left: 4px solid #047857;">
+            <p style="margin: 0; font-size: 12px; color: #047857; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">
+              <i class="bi bi-calendar-plus" style="margin-right: 6px;"></i>Borrow Date
+            </p>
+            <p style="margin: 0; font-size: 16px; color: #2d3748; font-weight: 600;" id="modalBorrow"></p>
+          </div>
+
+          <div style="background: #dbeafe; padding: 20px; border-radius: 12px; border-left: 4px solid #1e40af;">
+            <p style="margin: 0; font-size: 12px; color: #1e40af; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">
+              <i class="bi bi-calendar-check" style="margin-right: 6px;"></i>Due Date
+            </p>
+            <p style="margin: 0; font-size: 16px; color: #2d3748; font-weight: 600;" id="modalDue"></p>
+          </div>
+
+          <div style="background: #fef3c7; padding: 20px; border-radius: 12px; border-left: 4px solid #92400e;">
+            <p style="margin: 0; font-size: 12px; color: #92400e; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">
+              <i class="bi bi-calendar-x" style="margin-right: 6px;"></i>Return Date
+            </p>
+            <p style="margin: 0; font-size: 16px; color: #2d3748; font-weight: 600;" id="modalReturn"></p>
+          </div>
+
+          <div style="background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); padding: 20px; border-radius: 12px; border: 2px solid #667eea;">
+            <p style="margin: 0; font-size: 12px; color: #667eea; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">
+              <i class="bi bi-flag" style="margin-right: 6px;"></i>Status
+            </p>
+            <span id="modalStatus" class="badge" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 600;"></span>
+          </div>
+
+          <div style="background: #fed7d7; padding: 20px; border-radius: 12px; border-left: 4px solid #e53e3e; grid-column: span 2;">
+            <p style="margin: 0; font-size: 12px; color: #c53030; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">
+              <i class="bi bi-currency-dollar" style="margin-right: 6px;"></i>Fine Amount
+            </p>
+            <p style="margin: 0; font-size: 28px; color: #e53e3e; font-weight: 700;">
+              $<span id="modalFine"></span>
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="modal-footer" style="border-top: 1px solid #e2e8f0; padding: 20px 30px; background: #f7fafc;">
+        <button class="btn btn-secondary" data-bs-dismiss="modal" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; padding: 12px 30px; border-radius: 8px; font-weight: 600; color: white; transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 15px rgba(102, 126, 234, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+          <i class="bi bi-x-circle me-2"></i>Close
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+function viewDetails(recordId) {
+  // Example data - replace with your actual data fetching logic
+  const recordData = {
+    user: 'John Smith',
+    email: 'john.smith@email.com',
+    book: 'The Great Gatsby',
+    author: 'F. Scott Fitzgerald',
+    borrowDate: 'Dec 15, 2024',
+    dueDate: 'Jan 15, 2025',
+    returnDate: 'Not returned yet',
+    status: 'overdue',
+    fine: '15.50'
+  };
+
+  // Populate modal fields
+  document.getElementById('modalUser').textContent = recordData.user;
+  document.getElementById('modalEmail').textContent = recordData.email;
+  document.getElementById('modalBook').textContent = recordData.book;
+  document.getElementById('modalAuthor').textContent = recordData.author;
+  document.getElementById('modalBorrow').textContent = recordData.borrowDate;
+  document.getElementById('modalDue').textContent = recordData.dueDate;
+  document.getElementById('modalReturn').textContent = recordData.returnDate;
+  document.getElementById('modalFine').textContent = recordData.fine;
+
+  // Set status badge with appropriate styling
+  const statusBadge = document.getElementById('modalStatus');
+  statusBadge.innerHTML = '';
+  
+  if (recordData.status === 'borrowed') {
+    statusBadge.style.background = '#bee3f8';
+    statusBadge.style.color = '#2c5282';
+    statusBadge.innerHTML = '<i class="bi bi-bookmark"></i>Borrowed';
+  } else if (recordData.status === 'overdue') {
+    statusBadge.style.background = '#fed7d7';
+    statusBadge.style.color = '#c53030';
+    statusBadge.innerHTML = '<i class="bi bi-exclamation-circle"></i>Overdue';
+  } else if (recordData.status === 'returned') {
+    statusBadge.style.background = '#c6f6d5';
+    statusBadge.style.color = '#22543d';
+    statusBadge.innerHTML = '<i class="bi bi-check-circle"></i>Returned';
+  }
+
+  // Change fine amount color if zero
+  const fineElement = document.getElementById('modalFine').parentElement;
+  if (parseFloat(recordData.fine) === 0) {
+    fineElement.style.color = '#11998e';
+  } else {
+    fineElement.style.color = '#e53e3e';
+  }
+
+  // Show modal (requires Bootstrap JS)
+  const modal = new bootstrap.Modal(document.getElementById('recordDetailsModal'));
+  modal.show();
+}
+</script>
+
+<script>
+document.getElementById('recordDetailsModal').addEventListener('show.bs.modal', function (event) {
+  const button = event.relatedTarget;
+
+  document.getElementById('modalUser').textContent   = button.getAttribute('data-user');
+  document.getElementById('modalEmail').textContent  = button.getAttribute('data-email');
+  document.getElementById('modalBook').textContent   = button.getAttribute('data-book');
+  document.getElementById('modalAuthor').textContent = button.getAttribute('data-author');
+  document.getElementById('modalBorrow').textContent = button.getAttribute('data-borrow');
+  document.getElementById('modalDue').textContent    = button.getAttribute('data-due');
+  document.getElementById('modalReturn').textContent = button.getAttribute('data-return');
+  document.getElementById('modalFine').textContent   = button.getAttribute('data-fine');
+
+  const status = button.getAttribute('data-status');
+  const statusEl = document.getElementById('modalStatus');
+
+  statusEl.textContent = status.toUpperCase();
+  statusEl.className = 'badge';
+
+  if (status === 'borrowed') statusEl.classList.add('bg-primary');
+  else if (status === 'overdue') statusEl.classList.add('bg-danger');
+  else if (status === 'returned') statusEl.classList.add('bg-success');
+});
+</script>
 
 <script>
 function viewDetails(recordId) {
